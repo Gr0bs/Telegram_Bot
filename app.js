@@ -16,7 +16,7 @@ function getBirthday(){
   for(const elt of birthday){
     const DATE = moment().format('DD/MM/YYYY')
     if(elt.birthday.substring(0,5) === DATE.substring(0,5) ){
-      const AGE = moment(new Date(elt.birthday)).fromNow()
+      const AGE = moment().format("DD/MM/YYYY").diff(moment(elt.birthday), 'years')
       return { name: elt.name, age: AGE}
     }
   }
@@ -25,7 +25,7 @@ function getBirthday(){
 /**
  * WEATHER FETCH
  */
-const sendWeather = new CronJob('00 00 07 * * *', async () => {
+const sendDailyMsg = new CronJob('00 00 07 * * *', async () => {
   let weather = {
     temp: null,
     min: null,
@@ -44,11 +44,11 @@ const sendWeather = new CronJob('00 00 07 * * *', async () => {
       console.log(err)
     }
     
+    // CHECK BIRTH
+    const BIRTH = getBirthday()
+
     if(weather.temp !== null){
       
-      
-      // CHECK BIRTH
-      const BIRTH = getBirthday()
       if(BIRTH){
         console.log(BIRTH)
         bot.sendMessage( '509416027', `Il fait actuellement ${weather.temp}°C. Mais attention, il fera minimum ${weather.min}°C et maximum ${weather.max}°C. C'est l'anniversaire de ${BIRTH.name} aujourd'hui ! Il a ${BIRTH.age} ans, ca fait un paquet de choco-grenouille.`)
@@ -57,12 +57,16 @@ const sendWeather = new CronJob('00 00 07 * * *', async () => {
       }
       
     } else {
-      bot.sendMessage('509416027', `Bravo.. Bravo ! Je n'ai pas regardé la météo..`);
+      if(BIRTH){  
+        bot.sendMessage('509416027', `Bravo.. Bravo ! Je n'ai pas regardé la météo.. Toutefois, c'est l'anniversaire de ${BIRTH.name} aujourd'hui ! Il a ${BIRTH.age} ans, ca fait un paquet de choco-grenouille.`);
+      } else {
+        bot.sendMessage('509416027', `Bravo.. Bravo ! Je n'ai pas regardé la météo..`)
+      }
     }
 }, null, true, 'Europe/Brussels')
 
 
-sendWeather.start()
+sendDailyMsg.start()
 
 
 bot.on('message', (msg) => {
