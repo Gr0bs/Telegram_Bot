@@ -16,8 +16,7 @@ function getBirthday(){
   for(const elt of birthday){
     const DATE = moment().format('DD/MM/YYYY')
     if(elt.birthday.substring(0,5) === DATE.substring(0,5) ){
-      const AGE = moment().format("DD/MM/YYYY").diff(moment(elt.birthday), 'years')
-      return { name: elt.name, age: AGE}
+      return { name: elt.name}
     }
   }
 }
@@ -25,7 +24,7 @@ function getBirthday(){
 /**
  * WEATHER FETCH
  */
-const sendDailyMsg = new CronJob('00 00 07 * * *', async () => {
+const sendDailyMsg = new CronJob('00 18 18 * * *', async () => {
   let weather = {
     temp: null,
     min: null,
@@ -58,7 +57,7 @@ const sendDailyMsg = new CronJob('00 00 07 * * *', async () => {
       
     } else {
       if(BIRTH){  
-        bot.sendMessage('509416027', `Bravo.. Bravo ! Je n'ai pas regardé la météo.. Toutefois, c'est l'anniversaire de ${BIRTH.name} aujourd'hui ! Il a ${BIRTH.age} ans, ca fait un paquet de choco-grenouille.`);
+        bot.sendMessage('509416027', `Bravo.. Bravo ! Je n'ai pas regardé la météo.. Toutefois, c'est l'anniversaire de ${BIRTH.name} aujourd'hui !`);
       } else {
         bot.sendMessage('509416027', `Bravo.. Bravo ! Je n'ai pas regardé la météo..`)
       }
