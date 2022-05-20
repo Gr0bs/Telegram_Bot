@@ -24,7 +24,7 @@ function getBirthday(){
 /**
  * WEATHER FETCH
  */
-const sendDailyMsg = new CronJob('00 18 18 * * *', async () => {
+const sendDailyMsg = new CronJob('00 00 07 * * *', async () => {
   let weather = {
     temp: null,
     min: null,
